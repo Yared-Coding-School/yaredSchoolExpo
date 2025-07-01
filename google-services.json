@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "328024756429",
+    "project_id": "full-2c962",
+    "storage_bucket": "full-2c962.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:328024756429:android:ba62058fb8e521d2d85984",
+        "android_client_info": {
+          "package_name": "app.yaredSchool.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "328024756429-3b3b0udnkscb3lm4vebp9k6mng7c8b70.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt7O5abCgx7AtDGutpcb1M_5zOC8Fnvu4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "328024756429-3b3b0udnkscb3lm4vebp9k6mng7c8b70.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
