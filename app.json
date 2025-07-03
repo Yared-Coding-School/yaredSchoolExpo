@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "yaredSchoolExpo",
+    "name": "Yared Coding School",
     "slug": "yaredSchoolExpo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
     "scheme": "yaredschoolexpo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -37,6 +37,15 @@
     ],
     "experiments": {
       "typedRoutes": true
+    }, 
+    "extra": {
+        "firebaseApiKey": "AIzaSyBdM7eP-VQroO9wUZRYENasukvDJfr4N84",
+        "firebaseAuthDomain": "full-2c962.firebaseapp.com",
+        "firebaseProjectId": "full-2c962",
+        "firebaseStorageBucket": "full-2c962.appspot.com",
+        "firebaseMessagingSenderId": "328024756429",
+        "firebaseAppId": "1:328024756429:web:288908d9a23cbc56d85984",
+        "firebaseMeasurementId": "G-056NEQBBNB"
     }
   }
 }
