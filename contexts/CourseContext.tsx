@@ -3,8 +3,7 @@ import { db } from "@/firebase/firebase";
 import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 
-
-export const CourseContext = createContext(null);;
+export const CourseContext = createContext(null);
 
 export const CourseProvider = ({ children }: any) => {
     const [courses, setCourses] = useState([]);
@@ -20,11 +19,7 @@ export const CourseProvider = ({ children }: any) => {
                 );
                 const snap = await getDocs(q);
                 const list = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-                console.log(
-                    "%c[CoursesProvider] loaded courses:",
-                    "color: green;",
-                    list.length
-                );
+
                 setCourses(list);
             } catch (e: any) {
                 console.error(

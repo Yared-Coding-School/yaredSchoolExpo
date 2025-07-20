@@ -1,13 +1,6 @@
 import { useCourses } from "@/hooks/useCourse";
-import { useLocalSearchParams } from "expo-router";
-import {
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { Link, useLocalSearchParams } from "expo-router";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 
 const CourseDetail = () => {
     const { courseId } = useLocalSearchParams();
@@ -34,13 +27,15 @@ const CourseDetail = () => {
                         • {point}
                     </Text>
                 ))}
-
-                <TouchableOpacity
+                <Link
                     style={styles.registerButton}
-                    onPress={() => {}}
+                    href={{
+                        pathname: "/Register",
+                        params: { courseId },
+                    }}
                 >
                     <Text style={styles.registerButtonText}>Register Now</Text>
-                </TouchableOpacity>
+                </Link>
             </View>
         </ScrollView>
     );
@@ -88,6 +83,7 @@ const styles = StyleSheet.create({
         padding: 16,
         marginVertical: 30,
         alignItems: "center",
+        textAlign: "center",
     },
     registerButtonText: {
         fontSize: 18,

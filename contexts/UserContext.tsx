@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useState, ReactNode } from "react";
 import {
-    getAuth,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,

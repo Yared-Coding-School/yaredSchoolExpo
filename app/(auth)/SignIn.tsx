@@ -26,7 +26,7 @@ const SignInScreen = () => {
     const handleSignIn = async () => {
         try {
             await SignIn(email.trim(), password)
-            router.replace("/(dashboard)/profile")
+            router.replace("/(dashboard)/Profile")
         } catch (error:any) {
             Alert.alert("Sign-In Error", error.message)
         }

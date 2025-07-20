@@ -15,7 +15,7 @@ export const socialLinks = [
     {
         Icon: FontAwesome,
         name: "youtube",
-        url: "https://www.youtube.com/@infinityCode-21",
+        url: "https://www.youtube.com/@yaredCode",
         color: "#FF0000", // YouTube red
     },
     {

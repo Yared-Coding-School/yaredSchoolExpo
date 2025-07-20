@@ -1,10 +1,8 @@
-import { useCourses } from "@/hooks/useCourse";
 import { Link } from "expo-router";
 import { useVideoPlayer, VideoView } from "expo-video";
 import {
     Image,
     Linking,
-    Platform,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -18,95 +16,70 @@ export default function EducationalAppHome() {
         player.loop = true;
         player.play();
     });
-    const courses = useCourses();
-    console.log(courses);
+
     return (
-        <View style={styles.background}>
-            <View style={styles.centeredContainer}>
-                {/* Card */}
-                <View
-                    style={[
-                        styles.card,
-                        Platform.OS === "android" && styles.androidShadow,
-                    ]}
-                >
-                    {/* Section 1: Slogan and Logo */}
-                    <View style={styles.section}>
-                        <Text style={styles.slogan}>Unlock Your Potential</Text>
-                        <Text style={styles.subSlogan}>
-                            with Smart Learning at
-                        </Text>
-                        <Text style={styles.schoolName}>
-                            Yared Coding School
-                        </Text>
-                        <View style={styles.logoContainer}>
-                            <Image
-                                source={require("../assets/images/logo.png")}
-                                style={styles.logoImg}
-                            />
-                        </View>
-                    </View>
-                    {/* Section 2: Video and CTA Buttons */}
-                    <View style={styles.section}>
-                        <View style={styles.videoCard}>
-                            <VideoView
-                                style={styles.video}
-                                player={player}
-                                contentFit="cover"
-                                nativeControls={false}
-                            />
-                        </View>
-                        <View style={styles.ctaRow}>
-                            <Link href="/Start" asChild>
-                                <TouchableOpacity style={styles.primaryBtn}>
-                                    <Text style={styles.primaryBtnText}>
-                                        Start
-                                    </Text>
-                                </TouchableOpacity>
-                            </Link>
+        <View style={styles.fullScreenContainer}>
+            {/* Section 1: Slogan and Logo */}
+            <View style={styles.section}>
+                <Text style={styles.slogan}>Unlock Your Potential</Text>
+                <Text style={styles.subSlogan}>with Smart Learning at</Text>
+                <Text style={styles.schoolName}>Yared Coding School</Text>
+                <View style={styles.logoContainer}>
+                    <Image
+                        source={require("../assets/images/logo.png")}
+                        style={styles.logoImg}
+                    />
+                </View>
+            </View>
+            {/* Section 2: Video and CTA Buttons */}
+            <View style={styles.section}>
+                <View style={styles.videoCard}>
+                    <VideoView
+                        style={styles.video}
+                        player={player}
+                        contentFit="cover"
+                        nativeControls={false}
+                    />
+                </View>
+                <View style={styles.ctaRow}>
+                    <Link href="/Start" asChild>
+                        <TouchableOpacity style={styles.primaryBtn}>
+                            <Text style={styles.primaryBtnText}>Start</Text>
+                        </TouchableOpacity>
+                    </Link>
+                    <TouchableOpacity
+                        style={styles.fab}
+                        onPress={() => Linking.openURL("tel:+251922761594")}
+                        accessibilityLabel="Call Us"
+                    >
+                        <Text style={styles.fabText}>📞</Text>
+                    </TouchableOpacity>
+                    <Link href="/SignIn" asChild>
+                        <TouchableOpacity style={styles.secondaryBtn}>
+                            <Text style={styles.secondaryBtnText}>Sign In</Text>
+                        </TouchableOpacity>
+                    </Link>
+                </View>
+            </View>
+            {/* Section 3: Social Links */}
+            <View style={styles.section}>
+                <View style={styles.socialSection}>
+                    <Text style={styles.socialTitle}>Connect with ME</Text>
+                    <View style={styles.socialIconsRow}>
+                        {socialLinks.map((item, idx) => (
                             <TouchableOpacity
-                                style={styles.fab}
-                                onPress={() =>
-                                    Linking.openURL("tel:+251922761594")
-                                }
-                                accessibilityLabel="Call Us"
+                                key={idx}
+                                style={styles.socialIconBtn}
+                                accessibilityLabel={item.name}
+                                onPress={() => Linking.openURL(item.url)}
                             >
-                                <Text style={styles.fabText}>📞</Text>
+                                <item.Icon
+                                    name={item.name as any}
+                                    size={28}
+                                    color={item.color}
+                                />
                             </TouchableOpacity>
-                            <Link href="/SignIn" asChild>
-                                <TouchableOpacity style={styles.secondaryBtn}>
-                                    <Text style={styles.secondaryBtnText}>
-                                        Sign In
-                                    </Text>
-                                </TouchableOpacity>
-                            </Link>
-                        </View>
-                    </View>
-                    {/* Section 3: Social Links */}
-                    <View style={styles.section}>
-                        <View style={styles.socialSection}>
-                            <Text style={styles.socialTitle}>
-                                Connect with us
-                            </Text>
-                            <View style={styles.socialIconsRow}>
-                                {socialLinks.map((item, idx) => (
-                                    <TouchableOpacity
-                                        key={idx}
-                                        style={styles.socialIconBtn}
-                                        accessibilityLabel={item.name}
-                                        onPress={() =>
-                                            Linking.openURL(item.url)
-                                        }
-                                    >
-                                        <item.Icon
-                                            name={item.name as any}
-                                            size={28}
-                                            color={item.color}
-                                        />
-                                    </TouchableOpacity>
-                                ))}
-                            </View>
-                        </View>
+                        ))}
                     </View>
                 </View>
             </View>
@@ -115,34 +88,28 @@ export default function EducationalAppHome() {
 }
 
 const styles = StyleSheet.create({
-    background: {
+    fullScreenContainer: {
         flex: 1,
         width: "100%",
-        backgroundColor: "#f3f4f6", // soft light gray "#f3f4f6"
-        justifyContent: "center",
+        height: "100%",
+        backgroundColor: "#E1D5C9",
+        justifyContent: "space-between",
         alignItems: "center",
         paddingVertical: 0,
         paddingHorizontal: 0,
     },
-    centeredContainer: {
-        flex: 1,
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-        paddingHorizontal: 0,
-    },
     card: {
         width: "100%",
-        height: "98%", // Make card occupy 100% of parent
+        height: "98%", // Make card occupy 98% of parent
         backgroundColor: "#E1D5C9",
         borderRadius: 32,
-        padding: 28,
+        padding: 0, // Remove padding to avoid overflow
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.1,
         shadowRadius: 24,
         elevation: 8,
-        alignItems: "center",
+        // Removed alignItems: "center"
         justifyContent: "space-between", // Distribute space between sections
     },
     androidShadow: {
@@ -310,8 +277,9 @@ const styles = StyleSheet.create({
     },
     section: {
         flex: 3, // Each section gets 3/9 = 33.3% of the space, but with space-between, the 10% is distributed as gaps
-        width: "100%",
+        width: "90%",
         justifyContent: "center",
         alignItems: "center",
+        paddingHorizontal: 10,
     },
 });

@@ -4,19 +4,31 @@
     "slug": "yaredSchoolExpo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo.png",
+    "icon": "./assets/images/logoEdited.png",
     "scheme": "yaredschoolexpo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "checkAutomatically": "ON_LOAD",
+      "url": "https://u.expo.dev/d154414d-7e65-4175-ba46-ba0a31b8dfa6"
+    },
+    "splash": {
+      "image": "./assets/images/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#E1D5C9"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yared-coding.app"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/logoEdited.png",
+        "backgroundColor": "#E1D5C9"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.yars21.yaredSchoolExpo"
     },
     "web": {
       "bundler": "metro",
@@ -28,24 +40,31 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/logoEdited.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#E1D5C9"
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true
-    }, 
+    },
     "extra": {
-        "firebaseApiKey": "AIzaSyBdM7eP-VQroO9wUZRYENasukvDJfr4N84",
-        "firebaseAuthDomain": "full-2c962.firebaseapp.com",
-        "firebaseProjectId": "full-2c962",
-        "firebaseStorageBucket": "full-2c962.appspot.com",
-        "firebaseMessagingSenderId": "328024756429",
-        "firebaseAppId": "1:328024756429:web:288908d9a23cbc56d85984",
-        "firebaseMeasurementId": "G-056NEQBBNB"
+      "firebaseApiKey": "AIzaSyBdM7eP-VQroO9wUZRYENasukvDJfr4N84",
+      "firebaseAuthDomain": "full-2c962.firebaseapp.com",
+      "firebaseProjectId": "full-2c962",
+      "firebaseStorageBucket": "full-2c962.appspot.com",
+      "firebaseMessagingSenderId": "328024756429",
+      "firebaseAppId": "1:328024756429:web:288908d9a23cbc56d85984",
+      "firebaseMeasurementId": "G-056NEQBBNB",
+      "router": {},
+      "eas": {
+        "projectId": "d154414d-7e65-4175-ba46-ba0a31b8dfa6"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }

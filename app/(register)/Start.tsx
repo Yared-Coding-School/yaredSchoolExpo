@@ -1,5 +1,5 @@
 import { useCourses } from "@/hooks/useCourse";
-import { useNavigation } from "@react-navigation/native";
+
 import { Link } from "expo-router";
 import {
     Image,

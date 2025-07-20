@@ -1,11 +1,31 @@
-
-import React from 'react'
-import { Tabs } from 'expo-router'
+import UsersOnly from "@/components/UsersOnly";
+import { Tabs } from "expo-router";
 
 const _layout = () => {
-  return (
-    <Tabs />
-  )
-}
+    return (
+        <UsersOnly>
+            <Tabs>
+                <Tabs.Screen
+                    name="Profile"
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Tabs.Screen
+                    name="Dashboard"
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+                <Tabs.Screen
+                    name="Resource"
+                    options={{
+                        headerShown: false,
+                    }}
+                />
+            </Tabs>
+        </UsersOnly>
+    );
+};
 
-export default _layout
+export default _layout;

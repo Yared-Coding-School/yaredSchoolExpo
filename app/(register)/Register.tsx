@@ -1,5 +1,13 @@
-import { Picker } from "@react-native-picker/picker";
-import React, { useState } from "react";
+import { getFriendlyAuthErrorMessage } from "@/constants/firebaseError";
+import { auth, db } from "@/firebase/firebase";
+import { useCourses } from "@/hooks/useCourse";
+import { router, useLocalSearchParams } from "expo-router";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+} from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useState } from "react";
 import {
     Linking,
     ScrollView,
@@ -11,24 +19,112 @@ import {
     View,
 } from "react-native";
 
-const allCourses = [
-    { title: "Full Stack Web Development" },
-    { title: "Mobile App Development" },
-    { title: "Data Science" },
-    { title: "UI/UX Design" },
-];
-
 const RegisterScreen = () => {
     const [name, setName] = useState("");
-    const [selectedCourse, setSelectedCourse] = useState("");
+    const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [phone, setPhone] = useState("");
-    const [marketing, setMarketing] = useState(true);
-    const handleSubmit = () => {
-        // TODO: Implement registration logic
-        alert(`Registered: ${name}, ${selectedCourse}, ${email}, ${phone}`);
+    const { courseId } = useLocalSearchParams();
+    const { courses } = useCourses();
+    const selectedCourse = (courses as any[]).find((c) => c.id === courseId);
+
+    const [submitting, setSubmitting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const handleSubmit = async () => {
+        setErrorMsg("");
+        setSubmitting(true);
+
+        // 1) Validate
+        if (!name || !phone || !email || !password || !selectedCourse) {
+            setErrorMsg("Please fill in all fields.");
+            setSubmitting(false);
+            return;
+        }
+
+        const cleanEmail = email.trim().toLowerCase();
+        const cleanName = name.trim();
+        const cleanPhone = phone.trim();
+
+        let user;
+        try {
+            // 2) Try creating a new auth user
+            const cred = await createUserWithEmailAndPassword(
+                auth,
+                cleanEmail,
+                password
+            );
+            user = cred.user;
+            // send verification
+            if (user.sendEmailVerification) {
+                user.sendEmailVerification().catch(console.warn);
+            }
+        } catch (createError: any) {
+            if (createError.code === "auth/email-already-in-use") {
+                // 2a) Already in auth: try signing in
+                try {
+                    const cred = await signInWithEmailAndPassword(
+                        auth,
+                        cleanEmail,
+                        password
+                    );
+                    user = cred.user;
+                } catch (signInError: any) {
+                    if (signInError.code === "auth/wrong-password") {
+                        setErrorMsg(
+                            "That email is already registered—if you forgot your password, please reset it."
+                        );
+                    } else {
+                        setErrorMsg(getFriendlyAuthErrorMessage(signInError));
+                    }
+                    setSubmitting(false);
+                    return;
+                }
+            } else {
+                // 2b) Other creation error
+                setErrorMsg(getFriendlyAuthErrorMessage(createError));
+                setSubmitting(false);
+                return;
+            }
+        }
+
+        // 3) Now we have user.uid—check if this user is already registered for this course
+        const registrationId = `${user.uid}_${selectedCourse.id}`;
+        const regRef = doc(db, "reg_student", registrationId);
+
+        const regSnap = await getDoc(regRef);
+        if (regSnap.exists()) {
+            setErrorMsg("You are already registered for this course!");
+            setSubmitting(false);
+            return;
+        }
+
+        // 4) Write the registration record
+        await setDoc(regRef, {
+            name: cleanName,
+            phone: cleanPhone,
+            email: cleanEmail,
+            subject: selectedCourse.id,
+            registrationDate: new Date().toISOString(),
+        });
+
+        // 5) Success! clear, alert, redirect...
+        setName("");
+        setPhone("");
+        setEmail("");
+        setPassword("");
+
+        alert(
+            "Registration Successful! A verification email has been sent to your email address. Please verify your email to complete the registration."
+        );
+
+        setTimeout(() => {
+            router.replace("/(dashboard)/Dashboard");
+        }, 2000);
+
+        setSubmitting(false);
     };
+
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.formContainer}>
@@ -47,25 +143,13 @@ const RegisterScreen = () => {
                             />
                         </View>
                         <View style={styles.inputCol}>
-                            <Text style={styles.label}>Select Course</Text>
-                            <View style={styles.pickerWrapper}>
-                                <Picker
-                                    selectedValue={selectedCourse}
-                                    onValueChange={setSelectedCourse}
-                                    style={styles.picker}
-                                >
-                                    <Picker.Item
-                                        label="Select a course"
-                                        value=""
-                                    />
-                                    {allCourses.map((course, idx) => (
-                                        <Picker.Item
-                                            key={idx}
-                                            label={course.title}
-                                            value={course.title}
-                                        />
-                                    ))}
-                                </Picker>
+                            <Text style={styles.label}>Selected Course</Text>
+                            <View style={styles.selectedCourseBox}>
+                                <Text style={styles.selectedCourseText}>
+                                    {selectedCourse
+                                        ? selectedCourse.title
+                                        : "No course selected"}
+                                </Text>
                             </View>
                         </View>
                     </View>
@@ -105,11 +189,9 @@ const RegisterScreen = () => {
                     </View>
                     <View style={styles.checkboxRow}>
                         <Switch
-                            value={marketing}
-                            onValueChange={setMarketing}
                             style={styles.checkbox}
                             trackColor={{ false: "#e5e7eb", true: "#f59e42" }}
-                            thumbColor={marketing ? "#f59e42" : "#fff"}
+                            thumbColor={"#f59e42"}
                         />
                         <Text style={styles.checkboxLabel}>
                             Please Call at +251 922 76 15 94
@@ -132,9 +214,13 @@ const RegisterScreen = () => {
                         </Text>
                         .
                     </Text>
+                    {errorMsg ? (
+                        <Text style={styles.errorBox}>{errorMsg}</Text>
+                    ) : null}
                     <TouchableOpacity
                         style={styles.submitBtn}
                         onPress={handleSubmit}
+                        disabled={submitting}
                     >
                         <Text style={styles.submitBtnText}>
                             Register For Class
@@ -284,6 +370,26 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: "#64748b",
         flex: 1,
+    },
+    selectedCourseBox: {
+        backgroundColor: "#f3f4f6",
+        borderRadius: 8,
+        padding: 12,
+        marginBottom: 16,
+        borderWidth: 1,
+        borderColor: "#e5e7eb",
+    },
+    selectedCourseText: {
+        fontSize: 16,
+        color: "#222",
+        fontWeight: "bold",
+    },
+    errorBox: {
+        color: "red",
+        backgroundColor: "#fee2e2",
+        padding: 8,
+        marginBottom: 12,
+        borderRadius: 4,
     },
 });
 
